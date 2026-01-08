@@ -1,8 +1,8 @@
-# ComfyUI-KevinNodes-BatchManipulators
+# ComfyUI KevinNodes BatchManipulators
 
-A collection of custom nodes for [ComfyUI](https://github.com/comfyanonymous/ComfyUI) focused on advanced **Batch manipulation**. 
+A collection of custom nodes for [ComfyUI](https://github.com/comfyanonymous/ComfyUI) focused on advanced **Batch manipulation** for both **Masks** and **Latents**.
 
-While many custom node packs offer image batch manipulation, precise control over **Mask Batches** (arrays of masks) is often missing. These nodes allow you to treat mask batches like arrays: inserting at specific indices, removing specific frames, zipping two batches together, and repeating specific frames.
+While many custom node packs offer image batch manipulation, precise control over **Mask Batches** and **Latent Batches** is often missing. These nodes allow you to treat batches like arrays: inserting at specific indices, removing specific frames, zipping two batches together, and repeating specific frames.
 
 ## 📥 Installation
 
@@ -22,60 +22,64 @@ While many custom node packs offer image batch manipulation, precise control ove
 
 ---
 
-## 🧩 Nodes
+## 🧩 The Nodes
 
-All nodes can be found in the node menu under:  
-`kevin_nodes` > `masking`
+### 🎭 Mask Nodes
+Located under: `kevin_nodes` > `masking`
 
-### 1. Insert Masks To Batch Indexed
+#### 1. Insert Masks To Batch Indexed
 Allows you to inject a mask (or a batch of masks) into an existing batch at specific index positions.
-
-*   **Inputs:**
-    *   `original_masks`: The main batch.
-    *   `masks_to_insert`: The mask(s) you want to add.
-    *   `indexes`: Comma-separated string (e.g., `0, 5, 10`).
-    *   `mode`: 
-        *   `replace`: Overwrites the mask at the target index.
-        *   `insert`: Injects the mask at the target index, shifting subsequent masks to the right.
+*   **Inputs:** `original_masks`, `masks_to_insert`, `indexes`, `mode` (replace/insert).
 *   **Features:** Automatically resizes the inserted masks to match the dimensions of the original batch.
 
-### 2. Remove Masks From Batch Indexed
+#### 2. Remove Masks From Batch Indexed
 Removes specific masks from a batch based on their index.
-
-*   **Inputs:**
-    *   `masks`: The input batch.
-    *   `indexes`: Comma-separated string of indices to remove (e.g., `0, 2, 4`).
+*   **Inputs:** `masks`, `indexes`.
 *   **Features:** Supports negative indexing (e.g., `-1` removes the last frame).
 
-### 3. Zip Mask Batches
+#### 3. Zip Mask Batches
 Interleaves two mask batches (A and B) into a single sequence (A1, B1, A2, B2, ...).
-
-*   **Inputs:**
-    *   `masks_a`: First batch.
-    *   `masks_b`: Second batch.
-    *   `match_dimensions`: If true, resizes Batch B to match Batch A's resolution.
+*   **Inputs:** `masks_a`, `masks_b`, `match_dimensions`.
 *   **Use Case:** Great for creating flickering mask effects or merging two different animation sequences frame-by-frame.
 
-### 4. Repeat Mask Indices
+#### 4. Repeat Mask Indices
 Repeats specific frames within a batch `N` times.
-
-*   **Inputs:**
-    *   `masks`: The input batch.
-    *   `indexes`: The indices of the frames you want to repeat (e.g., `0` to repeat the first frame).
-    *   `repeats`: How many times to repeat the selected frames.
+*   **Inputs:** `masks`, `indexes`, `repeats`.
 *   **Use Case:** Useful for "freezing" a mask for a specific duration within an animation sequence.
 
 ---
 
-## 🛠️ Compatibility
+### 🎨 Latent Nodes
+Located under: `kevin_nodes` > `latents`
 
-*   These nodes are designed to work with standard ComfyUI `MASK` types.
-*   They handle dimension mismatches gracefully by resizing inputs to match the target batch using nearest-neighbor interpolation (to preserve hard edges common in masks).
+**Note:** All Latent nodes automatically handle and resize the `noise_mask` (inpainting mask) attached to the latents if present.
+
+#### 1. Insert Latents To Batch Indexed
+Inserts latents into a batch at specified indices.
+*   **Inputs:** `original_latents`, `latents_to_insert`, `indexes`, `mode` (replace/insert).
+*   **Features:** 
+    *   Resizes inserted latents to match the resolution of the original batch.
+    *   Handles `noise_mask` alignment automatically.
+
+#### 2. Remove Latents From Batch Indexed
+Removes specific latents from a batch based on their index.
+*   **Inputs:** `latents`, `indexes`.
+
+#### 3. Zip Latent Batches
+Interleaves two latent batches (A and B) into a single sequence.
+*   **Inputs:** `latents_a`, `latents_b`.
+*   **Features:** Resizes Batch B to match the resolution of Batch A.
+
+#### 4. Repeat Latent Indices
+Repeats specific latents within a batch `N` times.
+*   **Inputs:** `latents`, `indexes`, `repeats`.
+
+----
 
 ## Contributors
 - ComposerKevin: Main developer. 
 
-## AI-Generated Content Note
+## AI-Generated Content Disclosure Notice
 Coding process of this software has AI code generator involved. 
 
 ## 📄 License
